@@ -25,9 +25,9 @@
 import java.awt.image.BufferedImage;
 import java.io.*;
 
-import processing.core.*;
+//import processing.core.*;
 
-class Gif extends PImage implements PConstants, Runnable {
+public class Gif extends PImage implements PConstants, Runnable {
 	PApplet parent;
 	Thread runner;
 	// if the animation is currently playing
@@ -86,15 +86,12 @@ class Gif extends PImage implements PConstants, Runnable {
 		runner = null;
 	}
 
-	/*
-	 * the thread's run method
-	 */
+	 // the thread's run method
 	void run() {
 		while (Thread.currentThread() == runner) {
 			try {
 				Thread.sleep(5);
-			} catch (InterruptedException e) {
-			}
+			} catch (InterruptedException e) { }
 
 			if (play) {
 				// if playing, check if we need to go to next frame
@@ -132,46 +129,33 @@ class Gif extends PImage implements PConstants, Runnable {
 		}
 	}
 
-	/*
-	 * creates an input stream using processings createInput() method to read
-	 * from the sketch data-directory
-	 */
+	 // creates an input stream using processings createInput() method to read from the sketch data-directory
 	InputStream createInputStream(PApplet parent, String filename) {
 		InputStream inputStream = parent.createInput(filename);
 		return inputStream;
 	}
 
-	/*
-	 * in case someone wants to mess with the frames directly, they can get an
-	 * array of PImages containing the animation frames. without having a
-	 * gif-object with a seperate thread
-	 * 
-	 * it takes a filename of a file in the datafolder.
-	 */
+	 // In case someone wants to mess with the frames directly, they can get an array of PImages 
+   // containing the animation frames. without having a gif-object with a seperate thread.
+	 // It takes a filename of a file in the datafolder.
 	PImage[] getPImages(PApplet parent, String filename) {
 		GifDecoder gifDecoder = createDecoder(parent, filename);
 		return extractFrames(gifDecoder);
 	}
 
-	/*
-	 * probably someone wants all the frames even if he has a playback-gif...
-	 */
+	// probably someone wants all the frames even if he has a playback-gif...
 	PImage[] getPImages() {
 		return frames;
 	}
 
-	/*
-	 * creates a GifDecoder object and loads a gif file
-	 */
+	 // creates a GifDecoder object and loads a gif file
 	GifDecoder createDecoder(PApplet parent, String filename) {
 		GifDecoder gifDecoder = new GifDecoder();
 		gifDecoder.read(createInputStream(parent, filename));
 		return gifDecoder;
 	}
 
-	/*
-	 * creates a PImage-array of gif frames in a GifDecoder object
-	 */
+	 // creates a PImage-array of gif frames in a GifDecoder object
 	PImage[] extractFrames(GifDecoder gifDecoder) {
 		int n = gifDecoder.getFrameCount();
 
@@ -187,9 +171,7 @@ class Gif extends PImage implements PConstants, Runnable {
 		return frames;
 	}
 
-	/*
-	 * creates an int-array of frame delays in the gifDecoder object
-	 */
+	 // creates an int-array of frame delays in the gifDecoder object
 	int[] extractDelays(GifDecoder gifDecoder) {
 		int n = gifDecoder.getFrameCount();
 		int[] delays = new int[n];
@@ -200,64 +182,44 @@ class Gif extends PImage implements PConstants, Runnable {
 		return delays;
 	}
 
-	/*
-	 * Can be called to ignore the repeat-count set in the gif-file. this does
-	 * not affect loop()/noLoop() settings.
-	 */
+	 // Can be called to ignore the repeat-count set in the gif-file. this does not affect loop()/noLoop() settings.
 	void ignoreRepeat() {
 		ignoreRepeatSetting = true;
 	}
 
-	/*
-	 * returns the number of repeats that is specified in the gif-file 0 means
-	 * repeat forever
-	 */
+	 // returns the number of repeats that is specified in the gif-file 0 means repeat forever
 	int getRepeat() {
 		return repeatSetting;
 	}
 
-	/*
-	 * returns true if this GIF object is playing
-	 */
+	 // returns true if this GIF object is playing
 	boolean isPlaying() {
 		return play;
 	}
 
-	/*
-	 * returns the current frame number
-	 */
+	 // returns the current frame number
 	int currentFrame() {
 		return currentFrame;
 	}
 
-	/*
-	 * returns true if the animation is set to loop
-	 */
+	 // returns true if the animation is set to loop
 	boolean isLooping() {
 		return loop;
 	}
 
-	/*
-	 * returns true if this animation is set to ignore the file's repeat setting
-	 */
+	 // returns true if this animation is set to ignore the file's repeat setting
 	boolean isIgnoringRepeat() {
 		return ignoreRepeatSetting;
 	}
 	
-	/*
-	 * returns the version of the library
-	 */
+	 // returns the version of the library
 	String version() {
 		return version;
 	}
 
-	/*
-	 * following methods mimic the behaviour of processing's movie class.
-	 */
+	 // The following methods mimic the behaviour of processing's movie class.
 
-	/**
-	 * Begin playing the animation, with no repeat.
-	 */
+	 // Begin playing the animation, with no repeat.
 	void play() {
 		play = true;
 		if (!ignoreRepeatSetting) {
@@ -265,32 +227,24 @@ class Gif extends PImage implements PConstants, Runnable {
 		}
 	}
 
-	/**
-	 * Begin playing the animation, with repeat.
-	 */
+	 // Begin playing the animation, with repeat.
 	void loop() {
 		play = true;
 		loop = true;
 	}
 
-	/**
-	 * Shut off the repeating loop.
-	 */
+	 // Shut off the repeating loop.
 	void noLoop() {
 		loop = false;
 	}
 
-	/**
-	 * Pause the animation at its current frame.
-	 */
+	 // Pause the animation at its current frame.
 	void pause() {
 		// System.out.println("pause");
 		play = false;
 	}
 
-	/**
-	 * Stop the animation, and rewind.
-	 */
+	 // Stop the animation, and rewind.
 	void stop() {
 		//System.out.println("stop");
 		play = false;
@@ -298,10 +252,7 @@ class Gif extends PImage implements PConstants, Runnable {
 		repeatCount = 0;
 	}
 
-	/**
-	 * Jump to a specific location (in frames). if the frame does not exist, go
-	 * to last frame
-	 */
+	 // Jump to a specific location (in frames). if the frame does not exist, go to last frame
 	void jump(int where) {
 		if (frames.length > where) {
 			currentFrame = where;
@@ -316,10 +267,8 @@ class Gif extends PImage implements PConstants, Runnable {
 			lastJumpTime = parent.millis();
 		}
 	}
-	/**	
-	 * Retun the number of frame of the gif
-	 * 
-	 */
+
+	// Return the number of frame of the gif
 	int getGifLength() {
 		return frames.length;
 		
@@ -366,21 +315,15 @@ import java.util.ArrayList;
  * 
  */
 
-class GifDecoder {
+public class GifDecoder {
 
-  /**
-   * File read status: No errors.
-   */
+   // File read status: No errors.
   static final int STATUS_OK = 0;
 
-  /**
-   * File read status: Error decoding file (may be partially decoded)
-   */
+   // File read status: Error decoding file (may be partially decoded)
   static final int STATUS_FORMAT_ERROR = 1;
 
-  /**
-   * File read status: Unable to open source.
-   */
+   // File read status: Unable to open source.
   static final int STATUS_OPEN_ERROR = 2;
 
   BufferedInputStream in;
@@ -458,7 +401,7 @@ class GifDecoder {
 
   int frameCount;
 
-  class GifFrame {
+  public class GifFrame {
     GifFrame(BufferedImage im, int del) {
       image = im;
       delay = del;
@@ -469,13 +412,9 @@ class GifDecoder {
     int delay;
   }
 
-  /**
-   * Gets display duration for specified frame.
-   * 
-   * @param n
-   *          int index of frame
-   * @return delay in milliseconds
-   */
+   // Gets display duration for specified frame.
+   // @param n, int index of frame
+   // @return delay in milliseconds
   int getDelay(int n) {
     //
     delay = -1;
@@ -485,38 +424,25 @@ class GifDecoder {
     return delay;
   }
 
-  /**
-   * Gets the number of frames read from file.
-   * 
-   * @return frame count
-   */
+   // Gets the number of frames read from file.
+   // @return frame count
   int getFrameCount() {
     return frameCount;
   }
 
-  /**
-   * Gets the first (or only) image read.
-   * 
-   * @return BufferedImage containing first frame, or null if none.
-   */
+   // Gets the first (or only) image read.
+   // @return BufferedImage containing first frame, or null if none.
   BufferedImage getImage() {
     return getFrame(0);
   }
 
-  /**
-   * Gets the "Netscape" iteration count, if any. A count of 0 means repeat
-   * indefinitiely.
-   * 
-   * @return iteration count if one was specified, else 1.
-   */
+   // Gets the "Netscape" iteration count, if any. A count of 0 means repeat indefinitiely.
+   // @return iteration count if one was specified, else 1.
   int getLoopCount() {
     return loopCount;
   }
 
-  /**
-   * Creates new frame image from current data (and previous frames as specified
-   * by their disposition codes).
-   */
+   // Creates new frame image from current data (and previous frames as specified by their disposition codes).
   void setPixels() {
     // expose destination image's pixels as int array
     int[] dest = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
@@ -602,11 +528,8 @@ class GifDecoder {
     }
   }
 
-  /**
-   * Gets the image contents of frame n.
-   * 
-   * @return BufferedImage representation of frame, or null if n is invalid.
-   */
+   // Gets the image contents of frame n.
+   // @return BufferedImage representation of frame, or null if n is invalid.
   BufferedImage getFrame(int n) {
     BufferedImage im = null;
     if ((n >= 0) && (n < frameCount)) {
@@ -615,22 +538,15 @@ class GifDecoder {
     return im;
   }
 
-  /**
-   * Gets image size.
-   * 
-   * @return GIF image dimensions
-   */
+   // Gets image size.
+   // @return GIF image dimensions
   Dimension getFrameSize() {
     return new Dimension(width, height);
   }
 
-  /**
-   * Reads GIF image from stream
-   * 
-   * @param BufferedInputStream
-   *          containing GIF file.
-   * @return read status code (0 = no errors)
-   */
+   // Reads GIF image from stream
+   // @param BufferedInputStream containing GIF file.
+   // @return read status code (0 = no errors)
   int read(BufferedInputStream is) {
     init();
     if (is != null) {
@@ -652,13 +568,9 @@ class GifDecoder {
     return status;
   }
 
-  /**
-   * Reads GIF image from stream
-   * 
-   * @param InputStream
-   *          containing GIF file.
-   * @return read status code (0 = no errors)
-   */
+   // Reads GIF image from stream
+   // @param InputStream containing GIF file.
+   // @return read status code (0 = no errors)
   int read(InputStream is) {
     init();
     if (is != null) {
@@ -681,14 +593,9 @@ class GifDecoder {
     return status;
   }
 
-  /**
-   * Reads GIF file from specified file/URL source (URL assumed if name contains
-   * ":/" or "file:")
-   * 
-   * @param name
-   *          String containing source
-   * @return read status code (0 = no errors)
-   */
+   // Reads GIF file from specified file/URL source (URL assumed if name contains ":/" or "file:")
+   // @param name, String containing source
+   // @return read status code (0 = no errors)
   int read(String name) {
     status = STATUS_OK;
     try {
@@ -707,10 +614,7 @@ class GifDecoder {
     return status;
   }
 
-  /**
-   * Decodes LZW image data into pixel array. Adapted from John Cristy's
-   * ImageMagick.
-   */
+   // Decodes LZW image data into pixel array. Adapted from John Cristy's ImageMagick.
   void decodeImageData() {
     int NullCode = -1;
     int npix = iw * ih;
@@ -727,7 +631,6 @@ class GifDecoder {
       pixelStack = new byte[MaxStackSize + 1];
 
     // Initialize GIF data stream decoder.
-
     data_size = read();
     clear = 1 << data_size;
     end_of_information = clear + 1;
@@ -741,7 +644,6 @@ class GifDecoder {
     }
 
     // Decode GIF pixel stream.
-
     datum = bits = count = first = top = pi = bi = 0;
 
     for (i = 0; i < npix;) {
@@ -825,16 +727,12 @@ class GifDecoder {
 
   }
 
-  /**
-   * Returns true if an error was encountered during reading/decoding
-   */
+  // Returns true if an error was encountered during reading/decoding
   boolean err() {
     return status != STATUS_OK;
   }
 
-  /**
-   * Initializes or re-initializes reader
-   */
+  // Initializes or re-initializes reader
   void init() {
     status = STATUS_OK;
     frameCount = 0;
@@ -843,9 +741,7 @@ class GifDecoder {
     lct = null;
   }
 
-  /**
-   * Reads a single byte from the input stream.
-   */
+  // Reads a single byte from the input stream.
   int read() {
     int curByte = 0;
     try {
@@ -856,11 +752,8 @@ class GifDecoder {
     return curByte;
   }
 
-  /**
-   * Reads next variable length block from input.
-   * 
-   * @return number of bytes stored in "buffer"
-   */
+   // Reads next variable length block from input.
+   // @return number of bytes stored in "buffer"
   int readBlock() {
     blockSize = read();
     int n = 0;
@@ -883,13 +776,9 @@ class GifDecoder {
     return n;
   }
 
-  /**
-   * Reads color table as 256 RGB integer values
-   * 
-   * @param ncolors
-   *          int number of colors to read
-   * @return int array containing 256 colors (packed ARGB with full alpha)
-   */
+   // Reads color table as 256 RGB integer values
+   // @param ncolors, int number of colors to read
+   // @return int array containing 256 colors (packed ARGB with full alpha)
   int[] readColorTable(int ncolors) {
     int nbytes = 3 * ncolors;
     int[] tab = null;
@@ -915,9 +804,7 @@ class GifDecoder {
     return tab;
   }
 
-  /**
-   * Main file parser. Reads GIF content blocks.
-   */
+  // Main file parser. Reads GIF content blocks.
   void readContents() {
     // read GIF file content blocks
     boolean done = false;
@@ -966,9 +853,7 @@ class GifDecoder {
     }
   }
 
-  /**
-   * Reads Graphics Control Extension values
-   */
+  // Reads Graphics Control Extension values
   void readGraphicControlExt() {
     read(); // block size
     int packed = read(); // packed fields
@@ -982,9 +867,7 @@ class GifDecoder {
     read(); // block terminator
   }
 
-  /**
-   * Reads GIF file header information.
-   */
+  // Reads GIF file header information.
   void readHeader() {
     String id = "";
     for (int i = 0; i < 6; i++) {
@@ -1002,9 +885,7 @@ class GifDecoder {
     }
   }
 
-  /**
-   * Reads next frame image
-   */
+  // Reads next frame image
   void readImage() {
     ix = readShort(); // (sub)image position & size
     iy = readShort();
@@ -1061,9 +942,7 @@ class GifDecoder {
 
   }
 
-  /**
-   * Reads Logical Screen Descriptor
-   */
+  // Reads Logical Screen Descriptor
   void readLSD() {
 
     // logical screen size
@@ -1081,9 +960,7 @@ class GifDecoder {
     pixelAspect = read(); // pixel aspect ratio
   }
 
-  /**
-   * Reads Netscape extenstion to obtain iteration count
-   */
+  // Reads Netscape extenstion to obtain iteration count
   void readNetscapeExt() {
     do {
       readBlock();
@@ -1096,17 +973,13 @@ class GifDecoder {
     } while ((blockSize > 0) && !err());
   }
 
-  /**
-   * Reads next 16-bit value, LSB first
-   */
+  // Reads next 16-bit value, LSB first
   int readShort() {
     // read 16-bit value, LSB first
     return read() | (read() << 8);
   }
 
-  /**
-   * Resets frame state for reading next image.
-   */
+  // Resets frame state for reading next image.
   void resetFrame() {
     lastDispose = dispose;
     lastRect = new Rectangle(ix, iy, iw, ih);
@@ -1118,9 +991,7 @@ class GifDecoder {
     lct = null;
   }
 
-  /**
-   * Skips variable length blocks up to and including next zero length block.
-   */
+  // Skips variable length blocks up to and including next zero length block.
   void skip() {
     do {
       readBlock();
