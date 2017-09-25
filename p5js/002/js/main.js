@@ -8,7 +8,7 @@ var anim = [];
 var ready = false;
 
 function setup() {
-  createCanvas(960, 540);
+  createCanvas(640, 480);
   background(127);
   
   var url = api + "&api_key=" + apiKey + "&q=" + query;
@@ -22,6 +22,7 @@ function draw() {
 
   for (var i=0; i<anim.length; i++) {
     anim[i].run();
+    if (anim[i].y > height + 100) anim.splice(i, 1);
   }
 }
 
@@ -41,15 +42,25 @@ class Anim {
     this.x = _x;
     this.y = _y;
     this.gif = _gif;
+    this.speed = random(0.5, 3);
   }
 
-  run() {
+  update() {
+    this.y += this.speed;
+  }
+
+  draw() {
     imageMode(CENTER);
     push();
     translate(this.x, this.y);
     scale(0.2, 0.2);
     image(this.gif, 0, 0);
     pop();
+  }
+
+  run() {
+    this.update();
+    this.draw();
   }
 
 }
